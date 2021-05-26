@@ -1,26 +1,32 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@import "Assets.css";
 
 :root{
-    --gray: #5D6372;
+    --board-background-color: #FEFEFF;
+    --board-border-color: #F2F2F4;
+    --header-color: #5D6372;
+    --no-task-color: #B7BDC9;
 }
 
 .board {
-    position: relative;
-    width: 306px;
+    flex-grow: 1;
+    min-width: 306px;
     margin: 0px 8px;
 
-    background: #FEFEFF;
-    border: 1px solid #F2F2F4;
+    background: var(--board-background-color);
+    border: 1px solid var(--board-border-color);
     border-radius: 4px;
 }
 
-.board-header-year {
-    width: 282px;
-    height: 16px;
-    left: 130px;
-    top: 80px;
+.board-header, .tasks {
+    margin: 12px;
+}
 
-    font-family: "Open Sans";
+.board-header-year, .board-header-month {
+    margin-bottom: 4px;
+}
+
+.board-header-year {
+    font-family: var(--font);
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
@@ -29,20 +35,78 @@
     display: flex;
     align-items: center;
 
-    color: var(--gray);
+    color: var(--header-color);
 }
 
 .board-header-month {
-    width: 282px;
-    height: 20px;
-    left: 130px;
-    top: 100px;
-
-    font-family: "Open Sans";
+    font-family: var(--font);
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
     line-height: 20px;
 
-    color: var(--gray);
+    color: var(--header-color);
+}
+
+.no-task {
+    margin: 0;
+    margin-top: 20px;
+
+    font-family: var(--font);
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+
+    color: var(--no-task-color);
+}
+
+.create-new-task-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px;
+
+    width: 145px;
+    height: 36px;
+    left: 122px;
+    top: 368px;
+
+    border-radius: 8px;
+}
+
+.create-new-task-button:hover {
+    cursor: pointer;
+}
+
+.create-new-task-button-icon {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 8px;
+}
+
+.create-new-task-text {
+    position: static;
+    width: 105px;
+    height: 20px;
+    left: 32px;
+    top: 8px;
+
+    font-family: var(--font);
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+
+    color: #2F3136;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 8px;
 }
