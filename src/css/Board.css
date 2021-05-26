@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+:root{
+    --gray: #5D6372;
+}
+
+.board {
+    position: relative;
+    width: 306px;
+    margin: 0px 8px;
+
+    background: #FEFEFF;
+    border: 1px solid #F2F2F4;
+    border-radius: 4px;
+}
+
+.board-header-year {
+    width: 282px;
+    height: 16px;
+    left: 130px;
+    top: 80px;
+
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 20px;
+
+    display: flex;
+    align-items: center;
+
+    color: var(--gray);
+}
+
+.board-header-month {
+    width: 282px;
+    height: 20px;
+    left: 130px;
+    top: 100px;
+
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+
+    color: var(--gray);
+}

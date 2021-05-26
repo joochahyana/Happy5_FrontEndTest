@@ -1,7 +1,13 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+:root{
+    --side-bar-width: 68px;
+}
+
 .side-bar {
     position: absolute;
-    width: 68px;
-    height: 1027px;
+    width: var(--side-bar-width);
+    height: 100vh;
     left: 0px;
     top: 0px;
 
@@ -14,4 +20,31 @@
     height: 28px;
     left: 20px;
     top: 20px;
+}
+
+.main {
+    position: absolute;
+    left: var(--side-bar-width);
+    right: 0;
+    margin: 20px 50px;
+}
+
+.main-header {
+    width: 174px;
+    height: 24px;
+
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.boards {
+    top: 68px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
 }
