@@ -1,0 +1,17 @@
+.side-bar {
+    position: absolute;
+    width: 68px;
+    height: 1027px;
+    left: 0px;
+    top: 0px;
+
+    background: #1A0931;
+}
+
+.side-bar-logo {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    left: 20px;
+    top: 20px;
+}
