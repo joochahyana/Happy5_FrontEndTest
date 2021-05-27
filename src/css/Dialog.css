@@ -50,7 +50,6 @@
     width: 520px;
     height: 24px;
 
-    font-style: normal;
     font-weight: 600;
     font-size: 20px;
     line-height: 27px;
@@ -75,8 +74,6 @@
     width: 63px;
     height: 16px;
 
-    font-style: normal;
-    font-weight: normal;
     font-size: 12px;
     line-height: 16px;
     display: flex;
@@ -94,8 +91,6 @@
 
     padding: 8px 12px;
     
-    font-style: normal;
-    font-weight: normal;
     font-size: 14px;
     line-height: 19px;
     display: flex;

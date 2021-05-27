@@ -1,1 +1,126 @@
-@import "Assets.css";
+:root {
+    --options-button-size: 36px;
+}
+
+.task {
+    position: relative;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    
+    background: #FFFFFF;
+    border: 1px solid #E4E4E8;
+    border-radius: 4px;
+}
+
+.task-name {
+    width: 250px;
+    margin: 16px;
+
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.task-weight {
+    width: 250px;
+    height: 16px;
+    margin: 16px;
+
+    display: flex;
+}
+
+.weight-icon {
+    width: 16px;
+    height: 16px;
+    left: 0px;
+    top: 0px;
+}
+
+.weight-text {
+    height: 16px;
+    left: 24px;
+    right: 0px;
+    top: 0px;
+
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.task-options-button {
+    position: absolute;
+    width: var(--options-button-size);
+    height: var(--options-button-size);
+    right: 0;
+    bottom: 0;
+    margin: 8px;
+}
+
+.task-options-button-icon {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 6px;
+    top: 6px;
+}
+
+.task-options-popup-3,
+.task-options-popup-4 {
+    position: absolute;
+    width: 138px;
+    right: 0;
+    top: var(--options-button-size);
+    
+    filter: drop-shadow(0px 6px 12px rgba(47, 49, 54, 0.2));
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    z-index: 1;
+}
+
+.task-options-popup-3 {
+    height: 113px;
+}
+
+.task-options-popup-4 {
+    height: 144px;
+}
+
+.task-options-popup-base {
+    position: absolute;
+    width: inherit;
+    height: inherit;
+
+    background: #F5F0FC;
+    border: 1px solid #E4E4E8;
+    border-radius: 4px;
+}
+
+.task-option {
+    position: relative;
+    padding: 4px 16px;
+    width: 106px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.task-option:hover {
+    color: #531C9F;
+}
+
+.task-option-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.task-option-text {
+    font-size: 14px;
+    line-height: 20px;
+}

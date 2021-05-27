@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API } from './API.js';
 import '../css/Board.css';
+import { Task } from './Task.js';
 import { Images } from './Images.js';
 
 export const Board = (props) => {
@@ -52,6 +53,15 @@ export const Board = (props) => {
             <div className="tasks">
                 {tasks.length === 0 &&
                     <p className="no-task">No Task Available</p>
+                }
+                {tasks.length > 0 &&
+                    tasks.map((task) => 
+                        <Task
+                            index={props.index}
+                            taskName={task.title}
+                            weight={task.weight}
+                            onClickEditTask={props.onClickEditTask} />
+                    )
                 }
             </div>
             <div className="create-new-task-button clickable"

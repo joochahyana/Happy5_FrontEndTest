@@ -31,14 +31,15 @@ export const Main = () => {
         })
         .then( (response) => {
             // console.log(response);
-            if (response.data.length > 0){
-                response.data.map((board) =>
+            if (response.data.length > 0) {
+                response.data.map((board, index) =>
                     setBoards((prev) => [
                         ...prev,
                         {
                             "id": board.id,
                             "title": board.title,
-                            "description": board.description
+                            "description": board.description,
+                            "index": index
                         }
                     ])
                 );
@@ -119,6 +120,7 @@ export const Main = () => {
                                 id={board.id}
                                 year={board.title}
                                 month={board.description}
+                                index={board.index}
                                 currBoardId={currBoardId}
                                 newTaskName={newTaskName}
                                 newWeight={newWeight}
