@@ -1,11 +1,17 @@
-@import "Assets.css";
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
 
 :root{
     --side-bar-width: 68px;
+    --font: "Open Sans";
+}
+
+.clickable:hover {
+    cursor: pointer;
 }
 
 * {
     margin: 0;
+    font-family: var(--font);
 }
 
 .side-bar {
@@ -38,7 +44,6 @@
     height: 24px;
     margin-bottom: 24px;
 
-    font-family: var(--font);
     font-style: normal;
     font-weight: 600;
     font-size: 20px;
