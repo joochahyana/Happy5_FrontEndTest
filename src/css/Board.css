@@ -15,6 +15,7 @@
 .board-header,
 .tasks {
     margin: 12px;
+    margin-bottom: 0px;
 }
 
 .board-header-year,
@@ -54,10 +55,9 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 8px;
+    margin: 4px;
 
-    width: 145px;
-    height: 36px;
+    width: fit-content;
     left: 122px;
     top: 368px;
 
@@ -67,12 +67,11 @@
 .create-new-task-button-icon {
     width: 16px;
     height: 16px;
-    margin: 0;
 
     flex: none;
     order: 0;
     flex-grow: 0;
-    margin: 0px 8px;
+    margin-left: 8px;
 }
 
 .create-new-task-text {
@@ -90,5 +89,5 @@
     flex: none;
     order: 1;
     flex-grow: 0;
-    margin: 0px 8px;
+    margin: 8px;
 }

@@ -36,7 +36,28 @@ export const Task = (props) => {
         })
         .then( (response) => {
             console.log(response);
-            props.getTasks();
+            props.getTasks(false);
+        }, (error) => {
+            console.log(error);
+        });
+    }
+
+    // move task
+    const handleClickMoveTask = (isMoveLeft) => {
+        let newBoardId = props.boardId;
+        newBoardId += isMoveLeft ? -1 : 1;
+        
+        axios.put(`https://hapi5-api.herokuapp.com/tasks/${props.id}/move/target/${newBoardId}`, {
+
+        }, {
+            headers: {
+                "Authorization": API.token
+            }
+        })
+        .then( (response) => {
+            console.log(response);
+            props.getTasks(true); // update prev board
+            props.onClickMoveTask(newBoardId); // update new board
         }, (error) => {
             console.log(error);
         });
@@ -64,7 +85,8 @@ export const Task = (props) => {
                             src={Images.imgDialogBase}
                             alt="popup-base" />
                         {props.boardIndex !== 0 && // not leftmost board
-                            <div className="task-option clickable">
+                            <div className="task-option clickable"
+                                onClick={() => handleClickMoveTask(true)}>
                                 <img className="task-option-icon"
                                     src={Images.imgLeftArrowIcon}
                                     alt="left-arrow-icon" />
@@ -72,7 +94,8 @@ export const Task = (props) => {
                             </div>
                         }
                         {props.boardIndex !== 3 && // not rightmost board
-                            <div className="task-option clickable">
+                            <div className="task-option clickable"
+                                onClick={() => handleClickMoveTask(false)} >
                                 <img className="task-option-icon"
                                     src={Images.imgRightArrowIcon}
                                     alt="right-arrow-icon" />

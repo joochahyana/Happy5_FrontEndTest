@@ -19,6 +19,8 @@ export const Main = () => {
     const [tempNewWeight, setTempNewWeight] = useState(0); // track changes when user types weight
     const [isWeightInputCorrect, setIsWeightInputCorrect] = useState(false); // check number 1-100
 
+    const [moveTaskNewBoardId, setMoveTaskNewBoardId] = useState(0);
+
     useEffect(() => {
         GetBoards();
     }, []);
@@ -101,6 +103,11 @@ export const Main = () => {
             console.log(error);
         });
     }
+    
+    // move task
+    const handleClickMoveTask = (newBoardId) => {
+        setMoveTaskNewBoardId(newBoardId);
+    }
 
     return (
         <div>
@@ -125,7 +132,9 @@ export const Main = () => {
                                 currBoardId={currBoardId}
                                 newTaskName={newTaskName}
                                 newWeight={newWeight}
-                                onClickCreateNewTask={handleClickCreateNewTask} />
+                                onClickCreateNewTask={handleClickCreateNewTask}
+                                onClickMoveTask={handleClickMoveTask}
+                                moveTaskNewBoardId={moveTaskNewBoardId} />
                         )
                     }
                 </div>

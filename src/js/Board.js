@@ -12,7 +12,7 @@ export const Board = (props) => {
         GetTasks();
     }, [props.id]);
 
-    const GetTasks = () => {
+    const GetTasks = (isNewOnTop) => {
         axios.get(`https://hapi5-api.herokuapp.com/boards/${props.id}/tasks`, {
             headers: {
                 "Authorization": API.token
@@ -21,29 +21,49 @@ export const Board = (props) => {
         .then( (response) => {
             // console.log(response);
             setTasks([]);
-            if (response.data.length > 0) {
-                response.data.map((task) =>
-                    setTasks((prev) => [
-                        ...prev,
-                        {
-                            "id": task.id,
-                            "title": task.title,
-                            "weight": task.weight
-                        }
-                    ])
-                );
+            if (response.data.length > 0) { 
+                if (isNewOnTop) {
+                    response.data.map((task) =>
+                        setTasks((prev) => [
+                            {
+                                "id": task.id,
+                                "title": task.title,
+                                "weight": task.weight
+                            }, 
+                            ...prev
+                        ])
+                    );
+                } else {
+                    response.data.map((task) =>
+                        setTasks((prev) => [
+                            ...prev,
+                            {
+                                "id": task.id,
+                                "title": task.title,
+                                "weight": task.weight
+                            }
+                        ])
+                    );
+                }
             }
         }, (error) => {
             console.log(error);
         });
     }
 
-    // update board
+    // update board (add / delete task)
     useEffect(() => {
         if (props.currBoardId === props.id) {
-            GetTasks();
+            GetTasks(false);
         }
     }, [props.newTaskName, props.newWeight]);
+
+    // update board (move task)
+    useEffect(() => {
+        if (props.moveTaskNewBoardId === props.id) {
+            GetTasks(true);
+        }
+    }, [props.moveTaskNewBoardId]);
 
     return (
         <div className="board">
@@ -59,11 +79,13 @@ export const Board = (props) => {
                     tasks.map((task, index) => 
                         <Task
                             key={index}
-                            boardIndex={props.index}
+                            boardIndex={props.index} // determine leftmost / rightmost / neither
+                            boardId={props.id} // used in move task
                             id={task.id}
                             taskName={task.title}
                             weight={task.weight}
                             onClickEditTask={props.onClickEditTask}
+                            onClickMoveTask={props.onClickMoveTask}
                             getTasks={GetTasks} />
                     )
                 }
