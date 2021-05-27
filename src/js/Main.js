@@ -3,6 +3,7 @@ import axios from 'axios';
 import { API } from './API.js';
 import { Board } from './Board.js';
 import { DialogCreateTask } from './DialogCreateTask.js';
+import { DialogDeleteTask } from './DialogDeleteTask.js';
 import { Images } from './Images.js';
 import '../css/Main.css';
 
@@ -10,16 +11,21 @@ const regex1to100 = /^[1-9][0-9]?$|^100$/;
 
 export const Main = () => {
     const [boards, setBoards] = useState([]);
-
-    const [isDialogShowing, setIsDialogShowing] = useState(false);
+    // create task
+    const [isCreateTaskDialogShowing, setIsCreateTaskDialogShowing] = useState(false); // show dialog
     const [currBoardId, setCurrBoardId] = useState(0); // selected board to create new task
     const [newTaskName, setNewTaskName] = useState(""); // trigger update board
     const [tempNewTaskName, setTempNewTaskName] = useState(""); // track changes when user types new task
     const [newWeight, setNewWeight] = useState(0); // trigger update board
     const [tempNewWeight, setTempNewWeight] = useState(0); // track changes when user types weight
     const [isWeightInputCorrect, setIsWeightInputCorrect] = useState(false); // check number 1-100
-
-    const [moveTaskNewBoardId, setMoveTaskNewBoardId] = useState(0);
+    // move task
+    const [moveTaskNewBoardId, setMoveTaskNewBoardId] = useState(0); // trigger update board
+    // delete task
+    const [isDeleteTaskDialogShowing, setIsDeleteTaskDialogShowing] = useState(false); // show dialog
+    const [deleteTaskId, setDeleteTaskId] = useState(0); // task to delete
+    const [deleteTaskBoardId, setDeleteTaskBoardId] = useState(0); // trigger update board
+    const [tempDeleteTaskBoardId, setTempDeleteTaskBoardId] = useState(0); // track board to update before confirm delete
 
     useEffect(() => {
         GetBoards();
@@ -52,9 +58,18 @@ export const Main = () => {
         });
     }
 
+    const handleClickCloseDialog = () => {
+        if (isCreateTaskDialogShowing) {
+            setIsCreateTaskDialogShowing(false);
+        }
+        if (isDeleteTaskDialogShowing) {
+            setIsDeleteTaskDialogShowing(false);
+        }
+    }
+
     // create new task
     const handleClickCreateNewTask = (boardId) => {
-        setIsDialogShowing(true);
+        setIsCreateTaskDialogShowing(true);
         setCurrBoardId(boardId);
         // reset variables
         setNewTaskName("");
@@ -62,10 +77,6 @@ export const Main = () => {
         setNewWeight(0);
         setTempNewWeight(0);
         setIsWeightInputCorrect(false);
-    }
-
-    const handleClickCloseDialog = () => {
-        setIsDialogShowing(false);
     }
 
     const handleClickSaveTask = () => {
@@ -109,6 +120,35 @@ export const Main = () => {
         setMoveTaskNewBoardId(newBoardId);
     }
 
+    // delete task
+    const handleClickDeleteTask = (taskId, boardId) => {
+        setIsDeleteTaskDialogShowing(true);
+        setDeleteTaskId(taskId);
+        setTempDeleteTaskBoardId(boardId);
+        console.log(deleteTaskId);
+        console.log(tempDeleteTaskBoardId);
+    }
+
+    const handleClickConfirmDeleteTask = () => {
+        console.log("test - delete");
+        DeleteTask();
+        handleClickCloseDialog();
+    }
+
+    const DeleteTask = () => {
+        axios.delete(`https://hapi5-api.herokuapp.com/tasks/${deleteTaskId}`, {
+            headers: {
+                "Authorization": API.token
+            }
+        })
+        .then( (response) => {
+            console.log(response);
+            setDeleteTaskBoardId(tempDeleteTaskBoardId); // update board
+        }, (error) => {
+            console.log(error);
+        });
+    }
+
     return (
         <div>
             <div className="side-bar">
@@ -132,18 +172,25 @@ export const Main = () => {
                                 currBoardId={currBoardId}
                                 newTaskName={newTaskName}
                                 newWeight={newWeight}
+                                moveTaskNewBoardId={moveTaskNewBoardId}
+                                deleteTaskBoardId={deleteTaskBoardId}
                                 onClickCreateNewTask={handleClickCreateNewTask}
                                 onClickMoveTask={handleClickMoveTask}
-                                moveTaskNewBoardId={moveTaskNewBoardId} />
+                                onClickDeleteTask={handleClickDeleteTask} />
                         )
                     }
                 </div>
-                {isDialogShowing &&
-                <DialogCreateTask
-                    onClickCloseDialog={handleClickCloseDialog}
-                    onChangeTaskName={handleChangeTaskName}
-                    onChangeWeight={handleChangeWeight}
-                    onClickSaveTask={handleClickSaveTask} />
+                {isCreateTaskDialogShowing &&
+                    <DialogCreateTask
+                        onClickCloseDialog={handleClickCloseDialog}
+                        onChangeTaskName={handleChangeTaskName}
+                        onChangeWeight={handleChangeWeight}
+                        onClickSaveTask={handleClickSaveTask} />
+                }
+                {isDeleteTaskDialogShowing &&
+                    <DialogDeleteTask
+                        onClickCloseDialog={handleClickCloseDialog}
+                        onClickComfirmDeleteTask={handleClickConfirmDeleteTask} />
                 }
             </div>
         </div>

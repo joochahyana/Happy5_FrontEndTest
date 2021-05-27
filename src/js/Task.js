@@ -27,21 +27,6 @@ export const Task = (props) => {
         setIsPopupOpen(!isPopupOpen);
     }
 
-    // delete task
-    const handleClickDeleteTask = () => {
-        axios.delete(`https://hapi5-api.herokuapp.com/tasks/${props.id}`, {
-            headers: {
-                "Authorization": API.token
-            }
-        })
-        .then( (response) => {
-            console.log(response);
-            props.getTasks(false);
-        }, (error) => {
-            console.log(error);
-        });
-    }
-
     // move task
     const handleClickMoveTask = (isMoveLeft) => {
         let newBoardId = props.boardId;
@@ -108,8 +93,8 @@ export const Task = (props) => {
                                 alt="edit-icon" />
                             <p className="task-option-text">Edit</p>
                         </div>
-                        <div className="task-option edit-task-bottom-option clickable"
-                            onClick={handleClickDeleteTask} >
+                        <div className="task-option clickable"
+                            onClick={() => props.onClickDeleteTask(props.id, props.boardId)} >
                             <img className="task-option-icon"
                                 src={Images.imgDeleteIcon}
                                 alt="delete-icon"/>

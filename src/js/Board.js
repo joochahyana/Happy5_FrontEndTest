@@ -51,7 +51,7 @@ export const Board = (props) => {
         });
     }
 
-    // update board (add / delete task)
+    // update board (add task)
     useEffect(() => {
         if (props.currBoardId === props.id) {
             GetTasks(false);
@@ -64,6 +64,13 @@ export const Board = (props) => {
             GetTasks(true);
         }
     }, [props.moveTaskNewBoardId]);
+
+    // update board (move task)
+    useEffect(() => {
+        if (props.deleteTaskBoardId === props.id) {
+            GetTasks(false);
+        }
+    }, [props.deleteTaskBoardId]);
 
     return (
         <div className="board">
@@ -84,8 +91,9 @@ export const Board = (props) => {
                             id={task.id}
                             taskName={task.title}
                             weight={task.weight}
-                            onClickEditTask={props.onClickEditTask}
                             onClickMoveTask={props.onClickMoveTask}
+                            onClickDeleteTask={props.onClickDeleteTask}
+                            onClickConfirmDelete={props.onClickConfirmDelete}
                             getTasks={GetTasks} />
                     )
                 }

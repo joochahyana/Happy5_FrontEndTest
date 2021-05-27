@@ -18,10 +18,16 @@
     height: 278px;
 }
 
+.dialog-delete-task {
+    position: relative;
+    width: 352px;
+    height: 188px;
+}
+
 .dialog-base {
     position: absolute;
-    width: 600px;
-    height: 276px;
+    width: inherit;
+    height: inherit;
     left: 1px;
     top: 1px;
 
@@ -36,18 +42,21 @@
     position: absolute;
     width: 24px;
     height: 24px;
-    left: 553px;
-    top: 25px;
+    right: 24px;
+    top: 24px;
 }
 
-.dialog-header,
-.dialog-content {
+.dialog-header {
     margin: 24px;
+    margin-bottom: 16px;
+}
+
+.dialog-content {
+    margin: 0px 24px;
 }
 
 .dialog-header-text {
     position: relative;
-    width: 520px;
     height: 24px;
 
     font-weight: 600;
@@ -59,8 +68,13 @@
     color: #000000;
 }
 
-.dialog-content {
-    border: 1px solid red;
+.dialog-delete-text {
+    position: relative;
+    
+    font-size: 14px;
+    line-height: 24px;
+
+    color: #5D6372;
 }
 
 .dialog-content-text,
@@ -115,27 +129,37 @@
     height: 36px;
 }
 
-.dialog-button-cancel {
+.dialog-buttons {
     position: absolute;
+    right: 24px;
+    bottom: 24px;
+}
+
+.dialog-button-cancel {
+    position: relative;
     width: 60px;
     height: 36px;
-    left: 405px;
-    top: 217px;
+    margin-right: 16px;
 
     border: 0px;
     border-radius: 8px;
 }
 
-.dialog-button-save-task {
-    position: absolute;
-    width: 96px;
-    height: 36px;
-    left: 481px;
-    top: 217px;
+.dialog-button-save-task,
+.dialog-button-delete {
+    position: relative;
+    padding: 8px 16px;
 
-    background: #5E20B3;
     border: 0px;
     border-radius: 4px;
 
     color: #FFFFFF;
+}
+
+.dialog-button-save-task {
+    background: #5E20B3;
+}
+
+.dialog-button-delete {
+    background: #E53303;
 }

@@ -11,7 +11,7 @@ export const DialogCreateTask = (props) => {
                     alt="dialog-base"
                     draggable="false" />
                 <header className="dialog-header">
-                    <h1 className="dialog-header-text">Create New Task</h1>
+                    <h1 className="dialog-header-text">Create Task</h1>
                     <img className="dialog-button-close clickable"
                         src={Images.imgCloseIcon}
                         alt="close-icon"
