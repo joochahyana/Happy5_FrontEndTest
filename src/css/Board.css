@@ -1,10 +1,5 @@
-@import "Assets.css";
-
 :root{
-    --board-background-color: #FEFEFF;
-    --board-border-color: #F2F2F4;
     --header-color: #5D6372;
-    --no-task-color: #B7BDC9;
 }
 
 .board {
@@ -12,21 +7,22 @@
     min-width: 306px;
     margin: 0px 8px;
 
-    background: var(--board-background-color);
-    border: 1px solid var(--board-border-color);
+    background: #FEFEFF;
+    border: 1px solid #F2F2F4;
     border-radius: 4px;
 }
 
-.board-header, .tasks {
+.board-header,
+.tasks {
     margin: 12px;
 }
 
-.board-header-year, .board-header-month {
+.board-header-year,
+.board-header-month {
     margin-bottom: 4px;
 }
 
 .board-header-year {
-    font-family: var(--font);
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
@@ -39,7 +35,6 @@
 }
 
 .board-header-month {
-    font-family: var(--font);
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
@@ -52,13 +47,12 @@
     margin: 0;
     margin-top: 20px;
 
-    font-family: var(--font);
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
     line-height: 24px;
 
-    color: var(--no-task-color);
+    color: #B7BDC9;
 }
 
 .create-new-task-button {
@@ -73,10 +67,6 @@
     top: 368px;
 
     border-radius: 8px;
-}
-
-.create-new-task-button:hover {
-    cursor: pointer;
 }
 
 .create-new-task-button-icon {
@@ -97,7 +87,6 @@
     left: 32px;
     top: 8px;
 
-    font-family: var(--font);
     font-style: normal;
     font-weight: normal;
     font-size: 14px;

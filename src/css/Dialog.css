@@ -1,0 +1,146 @@
+.overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 2;
+
+    background-color:rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog-create-edit-task {
+    position: relative;
+    width: 602px;
+    height: 278px;
+}
+
+.dialog-base {
+    position: absolute;
+    width: 600px;
+    height: 276px;
+    left: 1px;
+    top: 1px;
+
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+    background: #FFFFFF;
+    border: 1px solid #E4E4E8;
+    border-radius: 4px;
+}
+
+.dialog-button-close {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 553px;
+    top: 25px;
+}
+
+.dialog-header,
+.dialog-content {
+    margin: 24px;
+}
+
+.dialog-header-text {
+    position: relative;
+    width: 520px;
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 27px;
+    display: flex;
+    align-items: center;
+
+    color: #000000;
+}
+
+.dialog-content {
+    border: 1px solid red;
+}
+
+.dialog-content-text,
+.dialog-input-task-name,
+.dialog-input-weight {
+    margin-bottom: 8px;
+}
+
+.dialog-content-text{
+    position: relative;
+    width: 63px;
+    height: 16px;
+
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+
+    color: #5D6372;
+}
+
+.dialog-input-task-name,
+.dialog-input-weight {
+    background: #FFFFFF;
+    border: 1px solid #D6D6DD;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    padding: 8px 12px;
+    
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+}
+
+
+.dialog-input-task-name::placeholder,
+.dialog-input-weight::placeholder {
+    color: #B7BDC9;
+}
+
+.dialog-input-task-name {
+    position: relative;
+    width: 552px;
+    height: 36px;
+}
+
+.dialog-input-weight {
+    position: relative;
+    width: 64px;
+    height: 36px;
+}
+
+.dialog-button-cancel {
+    position: absolute;
+    width: 60px;
+    height: 36px;
+    left: 405px;
+    top: 217px;
+
+    border: 0px;
+    border-radius: 8px;
+}
+
+.dialog-button-save-task {
+    position: absolute;
+    width: 96px;
+    height: 36px;
+    left: 481px;
+    top: 217px;
+
+    background: #5E20B3;
+    border: 0px;
+    border-radius: 4px;
+
+    color: #FFFFFF;
+}
