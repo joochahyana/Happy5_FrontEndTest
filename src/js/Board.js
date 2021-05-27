@@ -19,7 +19,8 @@ export const Board = (props) => {
             }
         })
         .then( (response) => {
-            console.log(response);
+            // console.log(response);
+            setTasks([]);
             if (response.data.length > 0) {
                 response.data.map((task) =>
                     setTasks((prev) => [
@@ -55,12 +56,15 @@ export const Board = (props) => {
                     <p className="no-task">No Task Available</p>
                 }
                 {tasks.length > 0 &&
-                    tasks.map((task) => 
+                    tasks.map((task, index) => 
                         <Task
-                            index={props.index}
+                            key={index}
+                            boardIndex={props.index}
+                            id={task.id}
                             taskName={task.title}
                             weight={task.weight}
-                            onClickEditTask={props.onClickEditTask} />
+                            onClickEditTask={props.onClickEditTask}
+                            getTasks={GetTasks} />
                     )
                 }
             </div>

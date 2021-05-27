@@ -31,6 +31,7 @@ export const Main = () => {
         })
         .then( (response) => {
             // console.log(response);
+            setBoards([]);
             if (response.data.length > 0) {
                 response.data.map((board, index) =>
                     setBoards((prev) => [
@@ -93,7 +94,7 @@ export const Main = () => {
             }
         })
         .then( (response) => {
-            console.log(response);
+            // console.log(response);
             setNewTaskName(tempNewTaskName);
             setNewWeight(parseInt(tempNewWeight));
         }, (error) => {

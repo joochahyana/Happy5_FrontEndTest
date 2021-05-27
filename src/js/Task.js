@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { API } from './API.js';
 import '../css/Task.css';
 import { Images } from './Images.js';
 
@@ -24,6 +26,21 @@ export const Task = (props) => {
     const handleClickTogglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
     }
+
+    // delete task
+    const handleClickDeleteTask = () => {
+        axios.delete(`https://hapi5-api.herokuapp.com/tasks/${props.id}`, {
+            headers: {
+                "Authorization": API.token
+            }
+        })
+        .then( (response) => {
+            console.log(response);
+            props.getTasks();
+        }, (error) => {
+            console.log(error);
+        });
+    }
     
     return (
         <div className="task">
@@ -42,11 +59,11 @@ export const Task = (props) => {
                             src={Images.imgMore}
                             alt="task-options-icon" />
                     {isPopupOpen &&
-                    <div className={(props.index === 0 || props.index === 3) ? "task-options-popup-3" : "task-options-popup-4"}>
+                    <div className={(props.boardIndex === 0 || props.boardIndex === 3) ? "task-options-popup-3" : "task-options-popup-4"}>
                         <img className="task-options-popup-base"
                             src={Images.imgDialogBase}
                             alt="popup-base" />
-                        {props.index !== 0 && // not leftmost board
+                        {props.boardIndex !== 0 && // not leftmost board
                             <div className="task-option clickable">
                                 <img className="task-option-icon"
                                     src={Images.imgLeftArrowIcon}
@@ -54,7 +71,7 @@ export const Task = (props) => {
                                 <p className="task-option-text">Move Left</p>
                             </div>
                         }
-                        {props.index !== 3 && // not rightmost board
+                        {props.boardIndex !== 3 && // not rightmost board
                             <div className="task-option clickable">
                                 <img className="task-option-icon"
                                     src={Images.imgRightArrowIcon}
@@ -68,10 +85,11 @@ export const Task = (props) => {
                                 alt="edit-icon" />
                             <p className="task-option-text">Edit</p>
                         </div>
-                        <div className="task-option edit-task-bottom-option clickable">
+                        <div className="task-option edit-task-bottom-option clickable"
+                            onClick={handleClickDeleteTask} >
                             <img className="task-option-icon"
                                 src={Images.imgDeleteIcon}
-                                alt="delete-icon " />
+                                alt="delete-icon"/>
                             <p className="task-option-text">Delete</p>
                         </div>
                     </div>
