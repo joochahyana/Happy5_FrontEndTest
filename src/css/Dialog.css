@@ -12,10 +12,9 @@
     align-items: center;
 }
 
-.dialog-create-edit-task {
+.dialog-create-edit-task,
+.dialog-delete-task {
     position: relative;
-    width: 602px;
-    height: 278px;
 
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 
@@ -24,8 +23,12 @@
     border-radius: 4px;
 }
 
+.dialog-create-edit-task {
+    width: 602px;
+    height: 278px;
+}
+
 .dialog-delete-task {
-    position: relative;
     width: 352px;
     height: 188px;
 }
