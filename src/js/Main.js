@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API } from './API.js';
 import { Board } from './Board.js';
-import { DialogCreateTask } from './DialogCreateTask.js';
+import { DialogCreateEditTask } from './DialogCreateEditTask.js';
 import { DialogDeleteTask } from './DialogDeleteTask.js';
 import { Images } from './Images.js';
 import '../css/Main.css';
@@ -12,20 +12,20 @@ const regex1to100 = /^[1-9][0-9]?$|^100$/;
 export const Main = () => {
     const [boards, setBoards] = useState([]);
     // create task
+    const [tempCurrBoardId, setTempCurrBoardId] = useState(-1); // selected board to add new task
+    // create and edit task
     const [isCreateTaskDialogShowing, setIsCreateTaskDialogShowing] = useState(false); // show dialog
-    const [currBoardId, setCurrBoardId] = useState(0); // selected board to create new task
-    const [newTaskName, setNewTaskName] = useState(""); // trigger update board
-    const [tempNewTaskName, setTempNewTaskName] = useState(""); // track changes when user types new task
-    const [newWeight, setNewWeight] = useState(0); // trigger update board
-    const [tempNewWeight, setTempNewWeight] = useState(0); // track changes when user types weight
+    const [isCreateNewTask, setIsCreateNewTask] = useState(true); // create or edit task
+    const [currBoardId, setCurrBoardId] = useState(-1); // trigger update board
+    const [newTaskName, setNewTaskName] = useState(""); // new or edited task name
+    const [newWeight, setNewWeight] = useState(0); // new or edited weight
     const [isWeightInputCorrect, setIsWeightInputCorrect] = useState(false); // check number 1-100
-    // move task
-    const [moveTaskNewBoardId, setMoveTaskNewBoardId] = useState(0); // trigger update board
     // delete task
     const [isDeleteTaskDialogShowing, setIsDeleteTaskDialogShowing] = useState(false); // show dialog
-    const [deleteTaskId, setDeleteTaskId] = useState(0); // task to delete
-    const [deleteTaskBoardId, setDeleteTaskBoardId] = useState(0); // trigger update board
-    const [tempDeleteTaskBoardId, setTempDeleteTaskBoardId] = useState(0); // track board to update before confirm delete
+    // edit and delete task
+    const [currTaskId, setCurrTaskId] = useState(0); // task to edit
+    // 
+    const [isNewerTaskOnTop, setIsNewerTaskOnTop] = useState(false); // 
 
     useEffect(() => {
         GetBoards();
@@ -61,6 +61,8 @@ export const Main = () => {
     const handleClickCloseDialog = () => {
         if (isCreateTaskDialogShowing) {
             setIsCreateTaskDialogShowing(false);
+            setIsCreateNewTask(true);
+            setCurrBoardId(-1);
         }
         if (isDeleteTaskDialogShowing) {
             setIsDeleteTaskDialogShowing(false);
@@ -69,38 +71,81 @@ export const Main = () => {
 
     // create new task
     const handleClickCreateNewTask = (boardId) => {
-        setIsCreateTaskDialogShowing(true);
-        setCurrBoardId(boardId);
-        // reset variables
+        setIsCreateNewTask(true);
+        setTempCurrBoardId(boardId);
         setNewTaskName("");
-        setTempNewTaskName("");
         setNewWeight(0);
-        setTempNewWeight(0);
         setIsWeightInputCorrect(false);
+        setIsNewerTaskOnTop(false);
+        // show dialog
+        setIsCreateTaskDialogShowing(true);
     }
 
+    // edit task
+    const handleClickEditTask = (taskId, boardId) => {
+        // setIsCreateTaskDialogShowing(true);
+        setIsCreateNewTask(false);
+        setCurrTaskId(taskId);
+        GetTask(taskId);
+        setTempCurrBoardId(boardId);
+    }
+    
+    // create or edit task
     const handleClickSaveTask = () => {
-        if (tempNewTaskName.length > 0 && isWeightInputCorrect) {
-            CreateTask();
+        if (newTaskName.length > 0 && isWeightInputCorrect) {
+            if (isCreateNewTask) {
+                CreateTask();
+            } else {
+                EditTask();
+            }
             handleClickCloseDialog();
         } else {
-            console.log("incorrect weight input");
+            if (newTaskName.length <= 0) {
+                console.log("task name cannot be empty");
+            }
+            if (!isWeightInputCorrect) {
+                console.log("incorrect weight input");
+            }
         }
     }
 
     const handleChangeTaskName = ({target}) => {
-        setTempNewTaskName(target.value);
+        setNewTaskName(target.value);
     }
 
     const handleChangeWeight = ({target}) => {
         setIsWeightInputCorrect(regex1to100.test(target.value));
-        setTempNewWeight(target.value);
+        setNewWeight(target.value);
     }
 
+    // move task
+    const handleClickMoveTask = (newBoardId) => {
+        setIsNewerTaskOnTop(true);
+        setCurrBoardId(tempCurrBoardId); // update prev board
+        setCurrBoardId(newBoardId); // update new board
+        setCurrBoardId(-1);
+    }
+
+    // delete task
+    const handleClickDeleteTask = (taskId, boardId) => {
+        setIsDeleteTaskDialogShowing(true);
+        setCurrTaskId(taskId);
+        setTempCurrBoardId(boardId);
+        setCurrBoardId(-1);
+        setIsNewerTaskOnTop(false);
+    }
+
+    const handleClickConfirmDeleteTask = () => {
+        DeleteTask();
+        handleClickCloseDialog();
+    }
+
+    // APIs
+    // used in create new task
     const CreateTask = () => {
-        axios.post(`https://hapi5-api.herokuapp.com/boards/${currBoardId}/tasks`, {
-            "title": tempNewTaskName,
-            "weight": parseInt(tempNewWeight)
+        axios.post(`https://hapi5-api.herokuapp.com/boards/${tempCurrBoardId}/tasks`, {
+            "title": newTaskName,
+            "weight": parseInt(newWeight)
         }, {
             headers: {
                 "Authorization": API.token
@@ -108,42 +153,58 @@ export const Main = () => {
         })
         .then( (response) => {
             // console.log(response);
-            setNewTaskName(tempNewTaskName);
-            setNewWeight(parseInt(tempNewWeight));
+            setCurrBoardId(tempCurrBoardId);
         }, (error) => {
             console.log(error);
         });
     }
-    
-    // move task
-    const handleClickMoveTask = (newBoardId) => {
-        setMoveTaskNewBoardId(newBoardId);
-    }
 
-    // delete task
-    const handleClickDeleteTask = (taskId, boardId) => {
-        setIsDeleteTaskDialogShowing(true);
-        setDeleteTaskId(taskId);
-        setTempDeleteTaskBoardId(boardId);
-        console.log(deleteTaskId);
-        console.log(tempDeleteTaskBoardId);
-    }
-
-    const handleClickConfirmDeleteTask = () => {
-        console.log("test - delete");
-        DeleteTask();
-        handleClickCloseDialog();
-    }
-
-    const DeleteTask = () => {
-        axios.delete(`https://hapi5-api.herokuapp.com/tasks/${deleteTaskId}`, {
+    // used in edit task
+    const GetTask = (taskId) => {
+        axios.get(`https://hapi5-api.herokuapp.com/tasks/${taskId}`, {
             headers: {
                 "Authorization": API.token
             }
         })
         .then( (response) => {
-            console.log(response);
-            setDeleteTaskBoardId(tempDeleteTaskBoardId); // update board
+            // console.log(response);
+            setNewTaskName(response.data.title);
+            setNewWeight(response.data.weight);
+            // show dialog after get task done
+            setIsCreateTaskDialogShowing(true);
+        }, (error) => {
+            console.log(error);
+        });
+    }
+
+    // used in edit task
+    const EditTask = () => {
+        axios.put(`https://hapi5-api.herokuapp.com/tasks/${currTaskId}`, {
+            "title": newTaskName,
+            "weight": parseInt(newWeight)
+        }, {
+            headers: {
+                "Authorization": API.token
+            }
+        })
+        .then( (response) => {
+            // console.log(response);
+            setCurrBoardId(tempCurrBoardId);
+        }, (error) => {
+            console.log(error);
+        });
+    }
+
+    // used in delete task
+    const DeleteTask = () => {
+        axios.delete(`https://hapi5-api.herokuapp.com/tasks/${currTaskId}`, {
+            headers: {
+                "Authorization": API.token
+            }
+        })
+        .then( (response) => {
+            // console.log(response);
+            setCurrBoardId(tempCurrBoardId); // update board
         }, (error) => {
             console.log(error);
         });
@@ -172,16 +233,19 @@ export const Main = () => {
                                 currBoardId={currBoardId}
                                 newTaskName={newTaskName}
                                 newWeight={newWeight}
-                                moveTaskNewBoardId={moveTaskNewBoardId}
-                                deleteTaskBoardId={deleteTaskBoardId}
+                                isNewerTaskOnTop={isNewerTaskOnTop}
                                 onClickCreateNewTask={handleClickCreateNewTask}
                                 onClickMoveTask={handleClickMoveTask}
+                                onClickEditTask={handleClickEditTask}
                                 onClickDeleteTask={handleClickDeleteTask} />
                         )
                     }
                 </div>
                 {isCreateTaskDialogShowing &&
-                    <DialogCreateTask
+                    <DialogCreateEditTask
+                        isCreateNewTask={isCreateNewTask}
+                        taskName={newTaskName}
+                        weight={newWeight}
                         onClickCloseDialog={handleClickCloseDialog}
                         onChangeTaskName={handleChangeTaskName}
                         onChangeWeight={handleChangeWeight}

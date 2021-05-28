@@ -40,7 +40,7 @@ export const Task = (props) => {
             }
         })
         .then( (response) => {
-            console.log(response);
+            // console.log(response);
             props.getTasks(true); // update prev board
             props.onClickMoveTask(newBoardId); // update new board
         }, (error) => {
@@ -87,7 +87,8 @@ export const Task = (props) => {
                                 <p className="task-option-text">Move Right</p>
                             </div>
                         }
-                        <div className="task-option clickable">
+                        <div className="task-option clickable"
+                            onClick={() => props.onClickEditTask(props.id, props.boardId)} >
                             <img className="task-option-icon"
                                 src={Images.imgEditIcon}
                                 alt="edit-icon" />

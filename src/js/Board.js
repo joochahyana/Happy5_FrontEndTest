@@ -12,7 +12,7 @@ export const Board = (props) => {
         GetTasks();
     }, [props.id]);
 
-    const GetTasks = (isNewOnTop) => {
+    const GetTasks = (isNewerTaskOnTop) => {
         axios.get(`https://hapi5-api.herokuapp.com/boards/${props.id}/tasks`, {
             headers: {
                 "Authorization": API.token
@@ -22,7 +22,7 @@ export const Board = (props) => {
             // console.log(response);
             setTasks([]);
             if (response.data.length > 0) { 
-                if (isNewOnTop) {
+                if (isNewerTaskOnTop) {
                     response.data.map((task) =>
                         setTasks((prev) => [
                             {
@@ -51,26 +51,11 @@ export const Board = (props) => {
         });
     }
 
-    // update board (add task)
     useEffect(() => {
         if (props.currBoardId === props.id) {
-            GetTasks(false);
+            GetTasks(props.isNewerTaskOnTop);
         }
-    }, [props.newTaskName, props.newWeight]);
-
-    // update board (move task)
-    useEffect(() => {
-        if (props.moveTaskNewBoardId === props.id) {
-            GetTasks(true);
-        }
-    }, [props.moveTaskNewBoardId]);
-
-    // update board (move task)
-    useEffect(() => {
-        if (props.deleteTaskBoardId === props.id) {
-            GetTasks(false);
-        }
-    }, [props.deleteTaskBoardId]);
+    }, [props.currBoardId]);
 
     return (
         <div className="board">
@@ -92,6 +77,7 @@ export const Board = (props) => {
                             taskName={task.title}
                             weight={task.weight}
                             onClickMoveTask={props.onClickMoveTask}
+                            onClickEditTask={props.onClickEditTask}
                             onClickDeleteTask={props.onClickDeleteTask}
                             onClickConfirmDelete={props.onClickConfirmDelete}
                             getTasks={GetTasks} />
