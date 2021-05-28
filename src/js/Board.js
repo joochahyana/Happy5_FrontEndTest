@@ -12,7 +12,7 @@ export const Board = (props) => {
         GetTasks();
     }, [props.id]);
 
-    const GetTasks = (isNewerTaskOnTop) => {
+    const GetTasks = () => {
         axios.get(`https://hapi5-api.herokuapp.com/boards/${props.id}/tasks`, {
             headers: {
                 "Authorization": API.token
@@ -21,31 +21,16 @@ export const Board = (props) => {
         .then( (response) => {
             // console.log(response);
             setTasks([]);
-            if (response.data.length > 0) { 
-                if (isNewerTaskOnTop) {
-                    response.data.map((task) =>
-                        setTasks((prev) => [
-                            {
-                                "id": task.id,
-                                "title": task.title,
-                                "weight": task.weight
-                            }, 
-                            ...prev
-                        ])
-                    );
-                } else {
-                    response.data.map((task) =>
-                        setTasks((prev) => [
-                            ...prev,
-                            {
-                                "id": task.id,
-                                "title": task.title,
-                                "weight": task.weight
-                            }
-                        ])
-                    );
-                }
-            }
+            response.data.map((task) =>
+                setTasks((prev) => [
+                    ...prev,
+                    {
+                        "id": task.id,
+                        "title": task.title,
+                        "weight": task.weight
+                    }
+                ])
+            );
         }, (error) => {
             console.log(error);
         });
@@ -53,15 +38,15 @@ export const Board = (props) => {
 
     useEffect(() => {
         if (props.currBoardId === props.id) {
-            GetTasks(props.isNewerTaskOnTop);
+            GetTasks();
         }
     }, [props.currBoardId]);
 
     return (
-        <div className="board">
+        <div className="board border-radius-4">
             <header className="board-header">
-                <h1 className="board-header-year">{props.year}</h1>
-                <h2 className="board-header-month">{props.month}</h2>
+                <h1 className="board-header-text font-12">{props.year}</h1>
+                <h2 className="board-header-text bold">{props.month}</h2>
             </header>
             <div className="tasks">
                 {tasks.length === 0 &&
@@ -84,12 +69,12 @@ export const Board = (props) => {
                     )
                 }
             </div>
-            <div className="create-new-task-button clickable"
+            <div className="create-new-task-button margin-4 clickable"
                 onClick={() => props.onClickCreateNewTask(props.id)}>
                 <img className="create-new-task-button-icon"
                     src={Images.imgPurplePlusIcon}
                     alt="puple-plus-icon" />
-                <p className="create-new-task-text">Create new task</p>
+                <p className="create-new-task-text margin-8">Create new task</p>
             </div>
         </div>
     );

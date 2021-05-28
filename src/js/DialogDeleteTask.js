@@ -5,9 +5,9 @@ import { Images } from './Images.js';
 export const DialogDeleteTask = (props) => {
     return (
         <div className="overlay">
-            <div className="dialog-delete-task">
+            <div className="dialog-delete-task border-radius-4 bg-white">
                 <header className="dialog-header">
-                    <h1 className="dialog-header-text">Delete Task</h1>
+                    <h1 className="dialog-header-text font-20 bold">Delete Task</h1>
                     <img className="dialog-button-close clickable"
                         src={Images.imgCloseIcon}
                         alt="close-icon"

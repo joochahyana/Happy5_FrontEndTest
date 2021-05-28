@@ -49,8 +49,8 @@ export const Task = (props) => {
     }
     
     return (
-        <div className="task">
-            <p className="task-name">{props.taskName}</p>
+        <div className="task border-radius-4 bg-white">
+            <p className="task-name margin-16 bold">{props.taskName}</p>
             <div className="task-weight">
                 <img className="weight-icon"
                     src={Images.imgWeightIcon}
@@ -59,16 +59,14 @@ export const Task = (props) => {
             </div>
             <div className="task-options"
                 ref={myRef}>
-                <div className="task-options-button clickable"
+                <div className="task-options-button margin-8 border-radius-4 bg-white clickable"
                     onClick={handleClickTogglePopup} >
                         <img className="task-options-button-icon"
                             src={Images.imgMore}
                             alt="task-options-icon" />
                     {isPopupOpen &&
                     <div className={(props.boardIndex === 0 || props.boardIndex === 3) ? "task-options-popup-3" : "task-options-popup-4"}>
-                        <img className="task-options-popup-base"
-                            src={Images.imgDialogBase}
-                            alt="popup-base" />
+                        <div className="task-options-popup-base border-radius-4 bg-white"></div>
                         {props.boardIndex !== 0 && // not leftmost board
                             <div className="task-option clickable"
                                 onClick={() => handleClickMoveTask(true)}>

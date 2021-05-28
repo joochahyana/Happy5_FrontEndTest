@@ -24,8 +24,6 @@ export const Main = () => {
     const [isDeleteTaskDialogShowing, setIsDeleteTaskDialogShowing] = useState(false); // show dialog
     // edit and delete task
     const [currTaskId, setCurrTaskId] = useState(0); // task to edit
-    // 
-    const [isNewerTaskOnTop, setIsNewerTaskOnTop] = useState(false); // 
 
     useEffect(() => {
         GetBoards();
@@ -76,7 +74,6 @@ export const Main = () => {
         setNewTaskName("");
         setNewWeight(0);
         setIsWeightInputCorrect(false);
-        setIsNewerTaskOnTop(false);
         // show dialog
         setIsCreateTaskDialogShowing(true);
     }
@@ -120,7 +117,6 @@ export const Main = () => {
 
     // move task
     const handleClickMoveTask = (newBoardId) => {
-        setIsNewerTaskOnTop(true);
         setCurrBoardId(tempCurrBoardId); // update prev board
         setCurrBoardId(newBoardId); // update new board
         setCurrBoardId(-1);
@@ -132,7 +128,6 @@ export const Main = () => {
         setCurrTaskId(taskId);
         setTempCurrBoardId(boardId);
         setCurrBoardId(-1);
-        setIsNewerTaskOnTop(false);
     }
 
     const handleClickConfirmDeleteTask = () => {
@@ -213,13 +208,13 @@ export const Main = () => {
     return (
         <div>
             <div className="side-bar">
-                <img className="side-bar-logo"
+                <img className="side-bar-logo margin-20"
                     src={Images.imgHappy5Logo}
                     alt="Happy5-logo" />
             </div>
             <div className="main">
                 <header>
-                    <h1 className="main-header">Product Roadmap</h1>
+                    <h1 className="main-header font-20 bold">Product Roadmap</h1>
                 </header>
                 <div className ="boards">
                     {boards.length > 0 &&
@@ -233,7 +228,6 @@ export const Main = () => {
                                 currBoardId={currBoardId}
                                 newTaskName={newTaskName}
                                 newWeight={newWeight}
-                                isNewerTaskOnTop={isNewerTaskOnTop}
                                 onClickCreateNewTask={handleClickCreateNewTask}
                                 onClickMoveTask={handleClickMoveTask}
                                 onClickEditTask={handleClickEditTask}

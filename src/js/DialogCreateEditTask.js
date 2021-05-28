@@ -19,16 +19,11 @@ export const DialogCreateEditTask = (props) => {
         }
     }, [props.isCreateNewTask]);
     
-    const handleChangeInputTaskName = ({target}) => {
-        // props.onChangeTaskName();
-        console.log(target.value);
-    }
-
     return (
         <div className="overlay">
-            <div className="dialog-create-edit-task">
+            <div className="dialog-create-edit-task border-radius-4 bg-white">
                 <header className="dialog-header">
-                    <h1 className="dialog-header-text">{headerText}</h1>
+                    <h1 className="dialog-header-text font-20 bold">{headerText}</h1>
                     <img className="dialog-button-close clickable"
                         src={Images.imgCloseIcon}
                         alt="close-icon"
@@ -37,26 +32,27 @@ export const DialogCreateEditTask = (props) => {
                 <div className="dialog-content">
                     <div className="dialog-content-task-name">
                         <p className="dialog-content-text">Task Name</p>
-                        <input className="dialog-input-task-name"
+                        <input className="dialog-input-task-name bold border-radius-4"
                             type="text"
                             placeholder="example: Build rocket to Mars."
                             defaultValue={taskNameValue}
                             onChange={props.onChangeTaskName} />
                     </div>
-                    <div className="dialog-content-weight">
+                    <div className="dialog-content-weight border-radius-4">
                         <p className="dialog-content-text">Weight</p>
                         <input className="dialog-input-weight"
-                            type="text"
+                            type="number"
                             placeholder="0%"
                             defaultValue={weightValue}
+                            onWheel={(e) => e.target.blur()}
                             onChange={props.onChangeWeight} />
                     </div>
                     <div className="dialog-buttons">
-                        <input className="dialog-button-cancel clickable"
+                        <input className="dialog-button-cancel border-radius-4 clickable bg-white"
                             type="button"
                             value="Cancel"
                             onClick={props.onClickCloseDialog} />
-                        <input className="dialog-button-save-task clickable"
+                        <input className="dialog-button-save-task border-radius-4 clickable"
                             type="button"
                             value="Save Task"
                             onClick={props.onClickSaveTask} />
