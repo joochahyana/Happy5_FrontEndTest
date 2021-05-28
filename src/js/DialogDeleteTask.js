@@ -16,11 +16,11 @@ export const DialogDeleteTask = (props) => {
                 <div className="dialog-content">
                     <p className="dialog-delete-text">Are you sure want to delete this task? your action can't be reverted.</p>
                     <div className="dialog-buttons">
-                        <input className="dialog-button-cancel clickable"
+                        <input className="dialog-button-cancel border-radius-4 clickable bg-white"
                             type="button"
                             value="Cancel"
                             onClick={props.onClickCloseDialog} />
-                        <input className="dialog-button-delete clickable"
+                        <input className="dialog-button-delete border-radius-4 clickable"
                             type="button"
                             value="Delete"
                             onClick={props.onClickComfirmDeleteTask} />

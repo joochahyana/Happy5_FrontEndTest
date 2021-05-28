@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { API } from './API.js';
 import { Board } from './Board.js';
 import { DialogCreateEditTask } from './DialogCreateEditTask.js';
@@ -11,8 +10,7 @@ const regex1to100 = /^[1-9][0-9]?$|^100$/;
 
 export const Main = () => {
     const [boards, setBoards] = useState([]);
-    // create task
-    const [tempCurrBoardId, setTempCurrBoardId] = useState(-1); // selected board to add new task
+    const [tempCurrBoardId, setTempCurrBoardId] = useState(-1); // selected board
     // create and edit task
     const [isCreateTaskDialogShowing, setIsCreateTaskDialogShowing] = useState(false); // show dialog
     const [isCreateNewTask, setIsCreateNewTask] = useState(true); // create or edit task
@@ -29,65 +27,38 @@ export const Main = () => {
         GetBoards();
     }, []);
 
-    const GetBoards = () => {
-        axios.get("https://hapi5-api.herokuapp.com/boards", {
-            headers: {
-                "Authorization": API.token
-            }
-        })
-        .then( (response) => {
-            // console.log(response);
-            setBoards([]);
-            if (response.data.length > 0) {
-                response.data.map((board, index) =>
-                    setBoards((prev) => [
-                        ...prev,
-                        {
-                            "id": board.id,
-                            "title": board.title,
-                            "description": board.description,
-                            "index": index
-                        }
-                    ])
-                );
-            }
-        }, (error) => {
-            console.log(error);
-        });
-    }
-
+    // click close or cancel > DialogCreateEditTask, DialogDeleteTask
     const handleClickCloseDialog = () => {
         if (isCreateTaskDialogShowing) {
             setIsCreateTaskDialogShowing(false);
             setIsCreateNewTask(true);
-            setCurrBoardId(-1);
         }
         if (isDeleteTaskDialogShowing) {
             setIsDeleteTaskDialogShowing(false);
         }
     }
 
-    // create new task
+    // click create new task > Board
     const handleClickCreateNewTask = (boardId) => {
         setIsCreateNewTask(true);
         setTempCurrBoardId(boardId);
+        setCurrBoardId(-1);
         setNewTaskName("");
         setNewWeight(0);
         setIsWeightInputCorrect(false);
-        // show dialog
         setIsCreateTaskDialogShowing(true);
     }
 
-    // edit task
+    // click edit task > Task
     const handleClickEditTask = (taskId, boardId) => {
-        // setIsCreateTaskDialogShowing(true);
         setIsCreateNewTask(false);
         setCurrTaskId(taskId);
         GetTask(taskId);
         setTempCurrBoardId(boardId);
+        setCurrBoardId(-1);
     }
     
-    // create or edit task
+    // click save task > DialogCreateEditTask
     const handleClickSaveTask = () => {
         if (newTaskName.length > 0 && isWeightInputCorrect) {
             if (isCreateNewTask) {
@@ -106,23 +77,23 @@ export const Main = () => {
         }
     }
 
+    // track task name input change > DialogCreateEditTask
     const handleChangeTaskName = ({target}) => {
         setNewTaskName(target.value);
     }
 
+    // track weight input change > DialogCreateEditTask
     const handleChangeWeight = ({target}) => {
         setIsWeightInputCorrect(regex1to100.test(target.value));
         setNewWeight(target.value);
     }
 
-    // move task
+    // click move task > Task
     const handleClickMoveTask = (newBoardId) => {
-        setCurrBoardId(tempCurrBoardId); // update prev board
         setCurrBoardId(newBoardId); // update new board
-        setCurrBoardId(-1);
     }
 
-    // delete task
+    // click delete task > Task
     const handleClickDeleteTask = (taskId, boardId) => {
         setIsDeleteTaskDialogShowing(true);
         setCurrTaskId(taskId);
@@ -130,79 +101,79 @@ export const Main = () => {
         setCurrBoardId(-1);
     }
 
+    // click delete > DialogDeleteTask
     const handleClickConfirmDeleteTask = () => {
         DeleteTask();
         handleClickCloseDialog();
     }
 
+    // reset currBoardId
+    const resetCurrBoardId = () => {
+        setCurrBoardId(-1);
+    }
+
     // APIs
+    // used to show boards
+    const GetBoards = () => {
+        API("get", "https://hapi5-api.herokuapp.com/boards", null,
+            (response) => {
+                setBoards([]);
+                if (response.data.length > 0) {
+                    response.data.map((board, index) =>
+                        setBoards((prev) => [
+                            ...prev, {
+                                "id": board.id,
+                                "title": board.title,
+                                "description": board.description,
+                                "index": index
+                            }
+                        ])
+                    );
+                }
+            }
+        );
+    }
+
     // used in create new task
     const CreateTask = () => {
-        axios.post(`https://hapi5-api.herokuapp.com/boards/${tempCurrBoardId}/tasks`, {
-            "title": newTaskName,
-            "weight": parseInt(newWeight)
-        }, {
-            headers: {
-                "Authorization": API.token
+        API("post", `https://hapi5-api.herokuapp.com/boards/${tempCurrBoardId}/tasks`, {
+                "title": newTaskName,
+                "weight": parseInt(newWeight)
+            }, (response) => {
+                setCurrBoardId(tempCurrBoardId);
             }
-        })
-        .then( (response) => {
-            // console.log(response);
-            setCurrBoardId(tempCurrBoardId);
-        }, (error) => {
-            console.log(error);
-        });
+        );
     }
 
     // used in edit task
     const GetTask = (taskId) => {
-        axios.get(`https://hapi5-api.herokuapp.com/tasks/${taskId}`, {
-            headers: {
-                "Authorization": API.token
+        API("get", `https://hapi5-api.herokuapp.com/tasks/${taskId}`, null,
+            (response) => {
+                setNewTaskName(response.data.title);
+                setNewWeight(response.data.weight);
+                setIsCreateTaskDialogShowing(true);
             }
-        })
-        .then( (response) => {
-            // console.log(response);
-            setNewTaskName(response.data.title);
-            setNewWeight(response.data.weight);
-            // show dialog after get task done
-            setIsCreateTaskDialogShowing(true);
-        }, (error) => {
-            console.log(error);
-        });
+        );
     }
 
     // used in edit task
     const EditTask = () => {
-        axios.put(`https://hapi5-api.herokuapp.com/tasks/${currTaskId}`, {
-            "title": newTaskName,
-            "weight": parseInt(newWeight)
-        }, {
-            headers: {
-                "Authorization": API.token
+        API("put", `https://hapi5-api.herokuapp.com/tasks/${currTaskId}`, {
+                "title": newTaskName,
+                "weight": parseInt(newWeight)
+            }, (response) => {
+                setCurrBoardId(tempCurrBoardId);
             }
-        })
-        .then( (response) => {
-            // console.log(response);
-            setCurrBoardId(tempCurrBoardId);
-        }, (error) => {
-            console.log(error);
-        });
+        );
     }
 
     // used in delete task
     const DeleteTask = () => {
-        axios.delete(`https://hapi5-api.herokuapp.com/tasks/${currTaskId}`, {
-            headers: {
-                "Authorization": API.token
+        API("delete", `https://hapi5-api.herokuapp.com/tasks/${currTaskId}`, null,
+            (response) => {
+                setCurrBoardId(tempCurrBoardId);
             }
-        })
-        .then( (response) => {
-            // console.log(response);
-            setCurrBoardId(tempCurrBoardId); // update board
-        }, (error) => {
-            console.log(error);
-        });
+        );
     }
 
     return (
@@ -231,7 +202,8 @@ export const Main = () => {
                                 onClickCreateNewTask={handleClickCreateNewTask}
                                 onClickMoveTask={handleClickMoveTask}
                                 onClickEditTask={handleClickEditTask}
-                                onClickDeleteTask={handleClickDeleteTask} />
+                                onClickDeleteTask={handleClickDeleteTask}
+                                resetCurrBoardId={resetCurrBoardId} />
                         )
                     }
                 </div>

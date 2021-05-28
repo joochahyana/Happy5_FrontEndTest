@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { API } from './API.js';
 import '../css/Board.css';
 import { Task } from './Task.js';
@@ -12,35 +11,32 @@ export const Board = (props) => {
         GetTasks();
     }, [props.id]);
 
-    const GetTasks = () => {
-        axios.get(`https://hapi5-api.herokuapp.com/boards/${props.id}/tasks`, {
-            headers: {
-                "Authorization": API.token
-            }
-        })
-        .then( (response) => {
-            // console.log(response);
-            setTasks([]);
-            response.data.map((task) =>
-                setTasks((prev) => [
-                    ...prev,
-                    {
-                        "id": task.id,
-                        "title": task.title,
-                        "weight": task.weight
-                    }
-                ])
-            );
-        }, (error) => {
-            console.log(error);
-        });
-    }
-
+    // update tasks
     useEffect(() => {
         if (props.currBoardId === props.id) {
             GetTasks();
         }
     }, [props.currBoardId]);
+
+    // APIs
+    const GetTasks = () => {
+        API("get", `https://hapi5-api.herokuapp.com/boards/${props.id}/tasks`, null,
+            (response) => {
+                setTasks([]);
+                if(response.data.length > 0) {
+                    response.data.map((task) =>
+                        setTasks((prev) => [
+                            ...prev, {
+                                "id": task.id,
+                                "title": task.title,
+                                "weight": task.weight
+                            }
+                        ])
+                    );
+                }
+            }
+        );
+    }
 
     return (
         <div className="board border-radius-4">
@@ -65,6 +61,7 @@ export const Board = (props) => {
                             onClickEditTask={props.onClickEditTask}
                             onClickDeleteTask={props.onClickDeleteTask}
                             onClickConfirmDelete={props.onClickConfirmDelete}
+                            resetCurrBoardId={props.resetCurrBoardId}
                             getTasks={GetTasks} />
                     )
                 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { API } from './API.js';
 import '../css/Task.css';
 import { Images } from './Images.js';
@@ -15,7 +14,7 @@ export const Task = (props) => {
             return() => window.removeEventListener('mousedown', closePopup, false);
         }
     });
-  
+
     const closePopup = (e) => {
         if (myRef.current.contains(e.target)) {
             return;
@@ -25,29 +24,26 @@ export const Task = (props) => {
 
     const handleClickTogglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
+        props.resetCurrBoardId();
     }
 
     // move task
     const handleClickMoveTask = (isMoveLeft) => {
         let newBoardId = props.boardId;
         newBoardId += isMoveLeft ? -1 : 1;
-        
-        axios.put(`https://hapi5-api.herokuapp.com/tasks/${props.id}/move/target/${newBoardId}`, {
-
-        }, {
-            headers: {
-                "Authorization": API.token
-            }
-        })
-        .then( (response) => {
-            // console.log(response);
-            props.getTasks(true); // update prev board
-            props.onClickMoveTask(newBoardId); // update new board
-        }, (error) => {
-            console.log(error);
-        });
+        MoveTask(newBoardId);
     }
     
+    // APIs
+    const MoveTask = (newBoardId) => {
+        API("put", `https://hapi5-api.herokuapp.com/tasks/${props.id}/move/target/${newBoardId}`, null,
+            (response) => {
+                props.getTasks(); // update prev board
+                props.onClickMoveTask(newBoardId); // update new board
+            }
+        );
+    }
+
     return (
         <div className="task border-radius-4 bg-white">
             <p className="task-name margin-16 bold">{props.taskName}</p>

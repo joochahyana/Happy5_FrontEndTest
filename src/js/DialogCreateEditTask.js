@@ -7,6 +7,7 @@ export const DialogCreateEditTask = (props) => {
     const [taskNameValue, setTaskNameValue] = useState("");
     const [weightValue, setWeightValue] = useState("");
     
+    // determine create or edit task
     useEffect(() => {
         if (props.isCreateNewTask){ // create new task
             setHeaderText("Create Task");
